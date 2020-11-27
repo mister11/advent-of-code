@@ -9,13 +9,13 @@ class SolutionTest {
     @Test
     fun part1Test() {
         val solution = Solution(Resources.readFileAsList(1))
-        Assertions.assertEquals(34241, solution.part1())
+        Assertions.assertEquals(3368364, solution.part1())
     }
 
     @Test
     fun part2Test() {
         val solution = Solution(Resources.readFileAsList(1))
-        Assertions.assertEquals(51316, solution.part2())
+        Assertions.assertEquals(5049684, solution.part2())
     }
 
 }

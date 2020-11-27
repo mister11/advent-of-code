@@ -9,7 +9,7 @@ object Resources {
 
     private val classLoader = Resources.javaClass.classLoader
 
-    fun readFileRaw(day: Int): String = Files.readString(day.toInputPath())
+    fun readFileRaw(day: Int): String = Files.readString(day.toInputPath()).trim()
     fun readFileAsList(day: Int): List<String> = Files.readAllLines(day.toInputPath())
     private fun Int.toInputPath() = classLoader.getResource("data/day$this/input.txt")?.toURI()?.path?.toPath()
     private fun String.toPath() = Paths.get(this)

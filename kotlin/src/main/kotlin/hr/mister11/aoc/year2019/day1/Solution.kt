@@ -1,7 +1,5 @@
 package hr.mister11.aoc.year2019.day1
 
-import hr.mister11.aoc.Resources
-
 class Solution(private val massesInput: List<String>) {
 
     fun part1(): Int {
@@ -31,10 +29,4 @@ class Solution(private val massesInput: List<String>) {
     }
 
     private fun moduleFuel(fuel: Int): Int = fuel / 3 - 2
-}
-
-fun main() {
-    val solution = Solution(Resources.readFileAsList(1))
-    println("Part 1: ${solution.part1()}")
-    println("Part 1: ${solution.part2()}")
 }
