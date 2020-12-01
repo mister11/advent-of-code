@@ -4,7 +4,7 @@ import hr.mister11.aoc.Resources
 import kotlin.math.abs
 
 fun main() {
-    val solution = Solution(Resources.readFileAsList(3))
+    val solution = Solution(Resources.readFileAsList(2019, 3))
     println("Part 1: ${solution.part1()}")
     println("Part 2: ${solution.part2()}")
 }
