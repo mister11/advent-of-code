@@ -1,5 +1,13 @@
 package hr.mister11.aoc.year2019.day1
 
+import hr.mister11.aoc.Resources
+
+fun main() {
+    val solution = Solution(Resources.readFileAsList(1))
+    println("Part 1: ${solution.part1()}")
+    println("Part 2: ${solution.part2()}")
+}
+
 class Solution(private val massesInput: List<String>) {
 
     fun part1(): Int {
