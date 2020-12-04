@@ -7,8 +7,7 @@ class Intcode(
     fun execute() {
         var index = 0
         while (true) {
-            val opCode = OpCode.fromValue(intcodeValues[index])
-            val command = getCommand(opCode, index)
+            val command = getCommand(index)
             command.execute(intcodeValues)
             index += command.numOfArguments() + 1
         }
@@ -25,19 +24,52 @@ class Intcode(
 
     fun getValueAt(position: Int) = intcodeValues[position]
 
-    private fun getCommand(opCode: OpCode, index: Int): Command {
+    private fun getCommand(index: Int): Command {
+        val (opCode, rawParamModes) = getOpCodeAndRawParamModes(intcodeValues[index].toString())
         return when (opCode) {
             OpCode.ADD -> AddCommand(
-                arg1Index = intcodeValues[index + 1],
-                arg2Index = intcodeValues[index + 2],
-                resultIndex = intcodeValues[index + 3]
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(2) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(1) { '0' }.toString().toInt())
+
+                ),
+                resultArgument = Argument(
+                    value = intcodeValues[index + 3],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(0) { '0' }.toString().toInt()),
+                )
             )
             OpCode.MULTIPLY -> MultiplyCommand(
-                arg1Index = intcodeValues[index + 1],
-                arg2Index = intcodeValues[index + 2],
-                resultIndex = intcodeValues[index + 3]
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(2) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(1) { '0' }.toString().toInt())
+
+                ),
+                resultArgument = Argument(
+                    value = intcodeValues[index + 3],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(0) { '0' }.toString().toInt()),
+                )
             )
             OpCode.HALT -> HaltCommand()
+        }
+    }
+
+    private fun getOpCodeAndRawParamModes(opCodeRaw: String): Pair<OpCode, String> {
+        val opCodeRawLength = opCodeRaw.length
+        return if (opCodeRawLength == 1 || opCodeRawLength == 2) {
+            Pair(OpCode.fromValue(opCodeRaw.toInt()), "")
+        } else {
+            Pair(
+                OpCode.fromValue(opCodeRaw.substring(opCodeRawLength - 2, opCodeRawLength).toInt()),
+                opCodeRaw.substring(0, opCodeRawLength - 2)
+            )
         }
     }
 
