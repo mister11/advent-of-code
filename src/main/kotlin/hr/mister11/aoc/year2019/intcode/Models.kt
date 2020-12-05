@@ -3,8 +3,7 @@ package hr.mister11.aoc.year2019.intcode
 import java.lang.IllegalStateException
 
 interface Command {
-    fun execute(values: MutableList<Int>)
-    fun numOfArguments(): Int
+    fun execute(intcode: Intcode)
 }
 
 class AddCommand(
@@ -25,12 +24,91 @@ class MultiplyCommand(
     override fun binaryExecute(): (Int, Int) -> Int = { a, b -> a * b }
 }
 
+class InputCommand(
+    private val value: Int,
+    private val resultArgument: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        values[resultArgument.evaluate(values)] = value
+        intcode.index += 2
+    }
+}
+
+class OutputCommand(
+    private val resultArgument: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        intcode.addOutput(values[resultArgument.evaluate(values)])
+        intcode.index += 2
+    }
+}
+
+class JumpIfTrueCommand(
+    private val argument1: Argument,
+    private val argument2: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        if (argument1.evaluate(values) != 0) {
+            intcode.index = argument2.evaluate(values)
+        } else {
+            intcode.index += 3
+        }
+    }
+}
+
+class JumpIfFalseCommand(
+    private val argument1: Argument,
+    private val argument2: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        if (argument1.evaluate(values) == 0) {
+            intcode.index = argument2.evaluate(values)
+        } else {
+            intcode.index += 3
+        }
+    }
+}
+
+class LessThanCommand(
+    private val argument1: Argument,
+    private val argument2: Argument,
+    private val resultArgument: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        if (argument1.evaluate(values) < argument2.evaluate(values)) {
+            values[resultArgument.evaluate(values)] = 1
+        } else {
+            values[resultArgument.evaluate(values)] = 0
+        }
+        intcode.index += 4
+    }
+}
+
+class EqualsCommand(
+    private val argument1: Argument,
+    private val argument2: Argument,
+    private val resultArgument: Argument
+): Command {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
+        if (argument1.evaluate(values) == argument2.evaluate(values)) {
+            values[resultArgument.evaluate(values)] = 1
+        } else {
+            values[resultArgument.evaluate(values)] = 0
+        }
+        intcode.index += 4
+    }
+}
+
 class HaltCommand : Command {
-    override fun execute(values: MutableList<Int>) {
+    override fun execute(intcode: Intcode) {
         throw IllegalStateException("HALT reached")
     }
-
-    override fun numOfArguments() = 0
 }
 
 abstract class BinaryCommand(
@@ -41,12 +119,12 @@ abstract class BinaryCommand(
 
     abstract fun binaryExecute(): (Int, Int) -> Int
 
-    override fun execute(values: MutableList<Int>) {
+    override fun execute(intcode: Intcode) {
+        val values = intcode.intcodeValues
         val result = binaryExecute()(argument1.evaluate(values), argument2.evaluate(values))
         values[resultArgument.evaluate(values)] = result
+        intcode.index += 4
     }
-
-    override fun numOfArguments() = 3
 }
 
 data class Argument(
@@ -64,6 +142,12 @@ data class Argument(
 enum class OpCode(val value: Int) {
     ADD(1),
     MULTIPLY(2),
+    INPUT(3),
+    OUTPUT(4),
+    JUMP_IF_TRUE(5),
+    JUMP_IF_FALSE(6),
+    LESS_THAN(7),
+    EQUALS(8),
     HALT(99);
 
     companion object {

@@ -1,15 +1,18 @@
 package hr.mister11.aoc.year2019.intcode
 
 class Intcode(
-    private val intcodeValues: MutableList<Int>
+    val intcodeValues: MutableList<Int>
 ) {
 
+    private val inputs = mutableListOf<Int>()
+    private val outputs = mutableListOf<Int>()
+    var index = 0
+
     fun execute() {
-        var index = 0
+
         while (true) {
             val command = getCommand(index)
-            command.execute(intcodeValues)
-            index += command.numOfArguments() + 1
+            command.execute(this)
         }
     }
 
@@ -24,37 +27,109 @@ class Intcode(
 
     fun getValueAt(position: Int) = intcodeValues[position]
 
+    fun addInput(input: Int) = inputs.add(input)
+
+    fun addOutput(output: Int) = outputs.add(output)
+
+    fun getLatestOutput() = outputs.last()
+
     private fun getCommand(index: Int): Command {
         val (opCode, rawParamModes) = getOpCodeAndRawParamModes(intcodeValues[index].toString())
+        val rawParamModeIndex = rawParamModes.length - 1
         return when (opCode) {
             OpCode.ADD -> AddCommand(
                 argument1 = Argument(
                     value = intcodeValues[index + 1],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(2) { '0' }.toString().toInt())
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
                 ),
                 argument2 = Argument(
                     value = intcodeValues[index + 2],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(1) { '0' }.toString().toInt())
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
 
                 ),
                 resultArgument = Argument(
-                    value = intcodeValues[index + 3],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(0) { '0' }.toString().toInt()),
+                    value = index + 3,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 2) { '0' }.toString().toInt()),
                 )
             )
             OpCode.MULTIPLY -> MultiplyCommand(
                 argument1 = Argument(
                     value = intcodeValues[index + 1],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(2) { '0' }.toString().toInt())
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
                 ),
                 argument2 = Argument(
                     value = intcodeValues[index + 2],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(1) { '0' }.toString().toInt())
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
 
                 ),
                 resultArgument = Argument(
-                    value = intcodeValues[index + 3],
-                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(0) { '0' }.toString().toInt()),
+                    value = index + 3,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 2) { '0' }.toString().toInt()),
+                )
+            )
+            OpCode.INPUT -> InputCommand(
+                value = inputs.removeFirst(),
+                resultArgument = Argument(
+                    value = index + 1,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                )
+            )
+            OpCode.OUTPUT -> OutputCommand(
+                resultArgument = Argument(
+                    value = index + 1,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                )
+            )
+            OpCode.JUMP_IF_TRUE -> JumpIfTrueCommand(
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
+
+                )
+            )
+            OpCode.JUMP_IF_FALSE -> JumpIfFalseCommand(
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
+
+                )
+            )
+            OpCode.LESS_THAN -> LessThanCommand(
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
+
+                ),
+                resultArgument = Argument(
+                    value = index + 3,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 2) { '0' }.toString().toInt()),
+                )
+            )
+            OpCode.EQUALS -> EqualsCommand(
+                argument1 = Argument(
+                    value = intcodeValues[index + 1],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex) { '0' }.toString().toInt())
+                ),
+                argument2 = Argument(
+                    value = intcodeValues[index + 2],
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 1) { '0' }.toString().toInt())
+
+                ),
+                resultArgument = Argument(
+                    value = index + 3,
+                    parameterMode = ParameterMode.fromValue(rawParamModes.getOrElse(rawParamModeIndex - 2) { '0' }.toString().toInt()),
                 )
             )
             OpCode.HALT -> HaltCommand()
