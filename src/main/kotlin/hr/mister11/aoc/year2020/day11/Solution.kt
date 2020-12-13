@@ -40,13 +40,44 @@ class Solution(
     }
 
     fun part2(): Int {
-        var currentLayout = seatLayout.toMap()
+        val rows = seatLayout.maxOf { it.key.first }
+        val cols = seatLayout.maxOf { it.key.second }
+        val range = IntRange(1, max(rows, cols))
+        var currentLayout = seatLayout
         var isUpdated = true
         while (isUpdated) {
             isUpdated = false
             val newLayout: MutableMap<Pair<Int, Int>, Char> = mutableMapOf()
             currentLayout.forEach { (position, value) ->
-                val occupied = numberOfSeeableOccupied(currentLayout, position.first, position.second)
+                val i = position.first
+                val j = position.second
+                val occupied = listOfNotNull(
+                    range
+                        .firstOrNull { offset -> currentLayout[i - offset to j - offset] != '.' }
+                        ?.let { currentLayout[i - it to j - it] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i - offset to j] != '.' }
+                        ?.let { currentLayout[i - it to j] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i - offset to j + offset] != '.' }
+                        ?.let { currentLayout[i - it to j + it] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i to j - offset] != '.' }
+                        ?.let { currentLayout[i to j - it] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i to j + offset] != '.' }
+                        ?.let { currentLayout[i to j + it] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i + offset to j - offset] != '.' }
+                        ?.let { currentLayout[i + it to j - it] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i + offset to j] != '.' }
+                        ?.let { currentLayout[i + it to j] },
+                    range
+                        .firstOrNull { offset -> currentLayout[i + offset to j + offset] != '.' }
+                        ?.let { currentLayout[i + it to j + it] }
+
+                ).count { it == '#' }
                 if (value == 'L' && occupied == 0) {
                     isUpdated = true
                     newLayout[position] = '#'
@@ -74,38 +105,5 @@ class Solution(
             layout[i + 1 to j + 1],
 
             ).count { it == '#' }
-    }
-
-    private fun numberOfSeeableOccupied(layout: Map<Pair<Int, Int>, Char>, i: Int, j: Int): Int {
-        val rows = layout.maxOf { it.key.first }
-        val cols = layout.maxOf { it.key.second }
-        val range = IntRange(1, max(rows, cols))
-        return listOfNotNull(
-            range
-                .firstOrNull { offset -> layout[i - offset to j - offset] != '.' }
-                ?.let { layout[i - it to j - it] },
-            range
-                .firstOrNull { offset -> layout[i - offset to j] != '.' }
-                ?.let { layout[i - it to j] },
-            range
-                .firstOrNull { offset -> layout[i - offset to j + offset] != '.' }
-                ?.let { layout[i - it to j + it] },
-            range
-                .firstOrNull { offset -> layout[i to j - offset] != '.' }
-                ?.let { layout[i to j - it] },
-            range
-                .firstOrNull { offset -> layout[i to j + offset] != '.' }
-                ?.let { layout[i to j + it] },
-            range
-                .firstOrNull { offset -> layout[i + offset to j - offset] != '.' }
-                ?.let { layout[i + it to j - it] },
-            range
-                .firstOrNull { offset -> layout[i + offset to j] != '.' }
-                ?.let { layout[i + it to j] },
-            range
-                .firstOrNull { offset -> layout[i + offset to j + offset] != '.' }
-                ?.let { layout[i + it to j + it] }
-
-        ).count { it == '#' }
     }
 }
