@@ -1,7 +1,6 @@
 package hr.mister11.aoc.year2020.day13
 
 import hr.mister11.aoc.Resources
-import java.security.IdentityScope
 
 fun main() {
     val solution = Solution(Resources.readFileAsList(2020, 13))
@@ -31,23 +30,6 @@ class Solution(
                 .mapIndexedNotNull { index, value -> if (value == -1L) null else index }
                 .map { index -> Math.floorMod(-1L * index, idsWithXes[index]) }
         )
-
-//        val seed = idsWithXes[0]
-//        val potentialCandidates = generateSequence(seed) { it + seed }
-//        return potentialCandidates
-//            .first { candidate ->
-////                if (candidate % 10__ == 0L) {
-////                    println(candidate)
-////                }
-//                idsWithXes.mapIndexed { index, value ->
-//                    if (value == seed || value == -1L) {
-//                        true
-//                    } else {
-//                        (candidate + index) % value == 0L
-////                    (((candidate / value) + 1) * value) == candidate + index
-//                    }
-//                }.all { it }
-//            }
     }
 
     /*
