@@ -4,9 +4,10 @@ use std::{
 };
 
 mod day_1;
+mod day_2;
 
 fn main() {
-    day_1::solve(&read_file_as_list(1));
+    day_2::solve(&read_file_as_list(1));
 }
 
 fn read_file(day: i32) -> String {
