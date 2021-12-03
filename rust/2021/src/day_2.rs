@@ -1,5 +1,3 @@
-use std::slice::SliceIndex;
-
 pub fn solve(input: &Vec<String>) {
     println!("Part 1: {}", part_1(input));
     println!("Part 2: {}", part_2(input));
