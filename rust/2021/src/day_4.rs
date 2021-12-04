@@ -130,24 +130,7 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
         }
         is_winning = true;
     }
-
-    // check diagonals
-    is_winning = true;
-    for i in 0..BINGO_CARD_SIZE {
-        is_winning &= marked_positions.contains(&(i, i));
-    }
-    if is_winning {
-        return true;
-    }
-
-    is_winning = true;
-    for i in 0..BINGO_CARD_SIZE {
-        is_winning &= marked_positions.contains(&(i, BINGO_CARD_SIZE - i));
-    }
-    if is_winning {
-        return true;
-    }
-
+    
     is_winning
 }
 
