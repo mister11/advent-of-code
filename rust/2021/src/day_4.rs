@@ -112,7 +112,6 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
             }
         }
         if is_winning {
-            println!("1 win for row {}" , i);
             return true;
         }
         is_winning = true;
@@ -127,7 +126,6 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
             }
         }
         if is_winning {
-            println!("1 win for col {}" , j);
             return true;
         }
         is_winning = true;
@@ -139,7 +137,6 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
         is_winning &= marked_positions.contains(&(i, i));
     }
     if is_winning {
-        println!("1 win for diag");
         return true;
     }
 
@@ -148,7 +145,6 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
         is_winning &= marked_positions.contains(&(i, BINGO_CARD_SIZE - i));
     }
     if is_winning {
-        println!("1 win for diag");
         return true;
     }
 
