@@ -104,6 +104,7 @@ fn parse_cards(lines: Vec<&str>) -> Vec<HashMap<i32, (usize, usize)>> {
 fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
     let mut is_winning = true;
     // check rows
+
     for i in 0..BINGO_CARD_SIZE {
         for j in 0..BINGO_CARD_SIZE {
             is_winning &= marked_positions.contains(&(i, j));
@@ -130,7 +131,7 @@ fn is_card_winning(marked_positions: &HashSet<(usize, usize)>) -> bool {
         }
         is_winning = true;
     }
-    
+
     is_winning
 }
 
