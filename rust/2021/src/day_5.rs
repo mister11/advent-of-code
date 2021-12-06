@@ -1,5 +1,4 @@
-use itertools::{GroupBy, Itertools};
-use std::{io::BufRead, ops::Range, os::unix::prelude::MetadataExt};
+use itertools::Itertools;
 
 pub fn solve(lines: &Vec<String>) {
     println!("Part 1: {}", part_1(lines));
