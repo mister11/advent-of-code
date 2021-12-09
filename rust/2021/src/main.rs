@@ -10,6 +10,7 @@ mod day_4;
 mod day_5;
 mod day_6;
 mod day_7;
+mod day_8;
 
 fn main() {
     let day = env::args().last().unwrap();
@@ -21,6 +22,7 @@ fn main() {
         "5" => day_5::solve(&read_file_as_list(5)),
         "6" => day_6::solve(&read_file(6)),
         "7" => day_7::solve(&read_file(7)),
+        "8" => day_8::solve(&read_file_as_list(8)),
         _ => println!("Unknown day parameter")
     }
 }
