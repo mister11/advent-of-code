@@ -8,11 +8,11 @@ pub fn solve(input: &Vec<String>) {
     println!("Part 2: {}", part_2(&parsed_input));
 }
 
-fn part_1(input: &Vec<i32>) -> i32 {
+fn part_1(input: &[i32]) -> i32 {
     return input.windows(2).filter(|x| x[1] > x[0]).count() as i32;
 }
 
-fn part_2(input: &Vec<i32>) -> i32 {
+fn part_2(input: &[i32]) -> i32 {
     return input
         .windows(3)
         .map(|x| x.iter().sum())

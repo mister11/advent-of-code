@@ -1,9 +1,11 @@
 use std::{
+    env,
     fs::File,
-    io::{BufRead, BufReader}, env,
+    io::{BufRead, BufReader},
 };
 
 mod day_1;
+mod day_10;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -12,7 +14,6 @@ mod day_6;
 mod day_7;
 mod day_8;
 mod day_9;
-mod day_10;
 
 fn main() {
     let day = env::args().last().unwrap();
@@ -27,21 +28,23 @@ fn main() {
         "8" => day_8::solve(&read_file_as_list(8)),
         "9" => day_9::solve(&read_file_as_list(9)),
         "10" => day_10::solve(&read_file_as_list(10)),
-        _ => println!("Unknown day parameter")
+        _ => println!("Unknown day parameter"),
     }
 }
 
 fn read_file(day: i32) -> String {
-    std::fs::read_to_string(format!("../inputs/day_{}.txt", day))
-        .expect("Input for day not readable")
+    return std::fs::read_to_string(file_path(day)).expect("Input for day not readable");
 }
 
 fn read_file_as_list(day: i32) -> Vec<String> {
-    let file =
-        File::open(format!("../inputs/day_{}.txt", day)).expect("Input for day not readable");
+    let file = File::open(file_path(day)).expect("Input for day not readable");
 
     BufReader::new(file)
         .lines()
         .map(|l| l.expect("Cannot read line"))
         .collect()
+}
+
+fn file_path(day: i32) -> String {
+    return format!("../inputs/day_{}.txt", day);
 }
