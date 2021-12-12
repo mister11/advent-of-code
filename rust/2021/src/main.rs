@@ -6,6 +6,7 @@ use std::{
 
 mod day_1;
 mod day_10;
+mod day_11;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -28,6 +29,7 @@ fn main() {
         "8" => day_8::solve(&read_file_as_list(8)),
         "9" => day_9::solve(&read_file_as_list(9)),
         "10" => day_10::solve(&read_file_as_list(10)),
+        "11" => day_11::solve(&read_file_as_list(11)),
         _ => println!("Unknown day parameter"),
     }
 }
