@@ -8,6 +8,7 @@ mod day_1;
 mod day_10;
 mod day_11;
 mod day_12;
+mod day_13;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -32,6 +33,7 @@ fn main() {
         "10" => day_10::solve(&read_file_as_list(10)),
         "11" => day_11::solve(&read_file_as_list(11)),
         "12" => day_12::solve(&read_file_as_list(12)),
+        "13" => day_13::solve(&read_file(13)),
         _ => println!("Unknown day parameter"),
     }
 }
