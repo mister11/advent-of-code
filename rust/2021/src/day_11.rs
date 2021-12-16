@@ -92,17 +92,6 @@ fn execute_step(octopi: &Vec<Vec<i32>>) -> (Vec<Vec<i32>>, i32) {
     return (updated_octopi, flash_counter);
 }
 
-fn update_neighbors(mut octopi: Vec<Vec<i32>>, position: (i32, i32)) -> Vec<Vec<i32>> {
-    let rows = octopi.len();
-    let cols = octopi[0].len();
-    neighbors(&position, rows as i32, cols as i32)
-        .iter()
-        .filter(|position| position.0 < rows && position.1 < cols)
-        .for_each(|neighbor_position| octopi[neighbor_position.0][neighbor_position.1] += 1);
-
-    return octopi;
-}
-
 fn neighbors(position: &(i32, i32), x_upper: i32, y_upper: i32) -> Vec<(usize, usize)> {
     return vec![
         (position.0 - 1, position.1),

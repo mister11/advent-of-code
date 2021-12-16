@@ -1,10 +1,8 @@
 use std::{
     collections::HashSet,
     fmt::Debug,
-    iter::{FromIterator, Inspect},
+    iter::{FromIterator},
 };
-
-use itertools::Itertools;
 
 pub fn solve(input: &String) {
     println!("Part 1: {}", part_1(&input));

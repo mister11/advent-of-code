@@ -4,8 +4,6 @@ use std::{
     vec, iter::FromIterator,
 };
 
-use itertools::Itertools;
-
 pub fn solve(input: &[String]) {
     let graph = parse_input(input);
     println!("Part 1: {}", part_1(&graph));
