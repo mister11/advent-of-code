@@ -1,0 +1,4 @@
+[alias]
+generate = "run --bin generate"
+run-day = "run --bin"
+test-day = "test --bin"
