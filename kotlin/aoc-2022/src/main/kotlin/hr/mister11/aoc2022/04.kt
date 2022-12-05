@@ -11,6 +11,7 @@ fun main() {
 object Solution04 {
     fun part1(input: String): String {
         return input
+            .trim()
             .lines()
             .map { line -> line.split(",") }
             .map { elfRanges ->
@@ -34,6 +35,7 @@ object Solution04 {
 
     fun part2(input: String): String {
         return input
+            .trim()
             .lines()
             .map { line -> line.split(",") }
             .map { elfRanges ->

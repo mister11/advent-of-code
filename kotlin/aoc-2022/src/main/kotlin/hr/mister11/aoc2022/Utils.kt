@@ -9,5 +9,5 @@ fun readExample(day: String): String {
 }
 
 private fun readResourceFile(path: String): String {
-    return object {}.javaClass.getResourceAsStream(path)?.bufferedReader()?.readText().orEmpty().trim()
+    return object {}.javaClass.getResourceAsStream(path)?.bufferedReader()?.readText().orEmpty()
 }

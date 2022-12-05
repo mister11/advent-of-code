@@ -10,6 +10,7 @@ fun main() {
 object Solution03 {
     fun part1(input: String): String {
         return input
+            .trim()
             .lines()
             .asSequence()
             .map { line -> line.chunked(line.length / 2) }
@@ -21,6 +22,7 @@ object Solution03 {
 
     fun part2(input: String): String {
         return input
+            .trim()
             .lines()
             .asSequence()
             .chunked(3)

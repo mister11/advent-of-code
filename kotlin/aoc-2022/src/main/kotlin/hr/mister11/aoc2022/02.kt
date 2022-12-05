@@ -28,6 +28,7 @@ private val roundOutcomeMap = mapOf(
 object Solution02 {
     fun part1(input: String): String {
         return input
+            .trim()
             .lines()
             .map { line ->
                 val token = line.split("\\s+".toRegex())
@@ -56,6 +57,7 @@ object Solution02 {
     // let's not use things from part 1
     fun part2(input: String): String {
         return input
+            .trim()
             .lines()
             .map { line ->
                 val token = line.split("\\s+".toRegex())
