@@ -9,7 +9,6 @@ fun main() {
     println("Part 2: ${Solution05.part2(input)}")
 }
 
-
 object Solution05 {
     fun part1(input: String): String {
         val lines = input.lines()
@@ -33,45 +32,42 @@ object Solution05 {
 
     private fun parseSupplies(supplyLines: List<String>): Supplies {
         val indicesLine = supplyLines.last()
-        val maxIndex = indicesLine.trim().split("\\s+".toRegex()).maxBy { it.toInt() }.toInt()
+        val maxIndex = indicesLine.trim().split("\\s+".toRegex()).last().toInt()
 
-        val stacks = (0 until maxIndex).map { Stack<Char>() }
+        val emptyStacks = (0 until maxIndex).map { Stack<Char>() }
 
-        supplyLines
-            .reversed()
-            .drop(1)
-            .forEach { crateLine ->
-                (0 until maxIndex)
-                    .forEach { index ->
-                        val value = crateLine.getOrNull(4 * index + 1)
-                        if (value != null && value != ' ') {
-                            stacks[index].push(value)
-                        }
-                    }
+        val stacks = supplyLines.reversed().drop(1).fold(emptyStacks) { stacks, crateLine ->
+            stacks.mapIndexed { index, stack ->
+                val value = crateLine.getOrNull(4 * index + 1)
+                if (value != null && value != ' ') {
+                    stack.push(value)
+                }
+                stack
             }
+        }
+
         return Supplies(stacks)
     }
 
     private fun parseMoves(lines: List<String>): List<Move> {
         val regex = "move (\\d+) from (\\d+) to (\\d+)".toRegex()
 
-        return lines
-            .map { moveLine ->
-                val groups = regex.find(moveLine)?.groupValues.orEmpty()
+        return lines.map { moveLine ->
+            val groups = regex.find(moveLine)?.groupValues.orEmpty()
 
-                Move(
-                    amount = groups[1].toInt(),
-                    fromIndex = groups[2].toInt() - 1,
-                    toIndex = groups[3].toInt() - 1
-                )
-            }
+            Move(
+                amount = groups[1].toInt(),
+                fromIndex = groups[2].toInt() - 1,
+                toIndex = groups[3].toInt() - 1
+            )
+        }
     }
 }
 
 data class Supplies(val stacks: List<Stack<Char>>) {
     fun rearrangeSingle(moves: List<Move>) {
         for (move in moves) {
-            (0 until move.amount).forEach {
+            repeat(move.amount) {
                 val removed = stacks[move.fromIndex].pop()
                 stacks[move.toIndex].push(removed)
             }
@@ -80,12 +76,10 @@ data class Supplies(val stacks: List<Stack<Char>>) {
 
     fun rearrangeMultiple(moves: List<Move>) {
         for (move in moves) {
-            val values = (0 until move.amount)
-                .map { stacks[move.fromIndex].pop() }
-            values.reversed()
-                .forEach {
-                    stacks[move.toIndex].push(it)
-                }
+            val values = (0 until move.amount).map { stacks[move.fromIndex].pop() }
+            values.reversed().forEach {
+                stacks[move.toIndex].push(it)
+            }
         }
     }
 
@@ -95,7 +89,5 @@ data class Supplies(val stacks: List<Stack<Char>>) {
 }
 
 data class Move(
-    val amount: Int,
-    val fromIndex: Int,
-    val toIndex: Int
+    val amount: Int, val fromIndex: Int, val toIndex: Int
 )
