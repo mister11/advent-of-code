@@ -124,7 +124,11 @@ object Solution09 {
 data class Position(
     val x: Int,
     val y: Int
-)
+) {
+    operator fun plus(that: Position): Position {
+        return Position(this.x + that.x, this.y + that.y)
+    }
+}
 
 data class HeadMove(
     val direction: Direction,
